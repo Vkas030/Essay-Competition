@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Leaderboard</h2>
+
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Score</th>
+                <th>Submitted At</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for item in rankings %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.user.username }}</td>
+                <td>{{ item.score }}</td>
+                <td>{{ item.submitted_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

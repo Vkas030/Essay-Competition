@@ -1,0 +1,409 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}Global Essay Writing Contest 2024{% endblock %}
+    </title>
+    <meta
+      name="description"
+      content="{% block description %}Join the world's most prestigious essay writing contest. Open to writers from 150+ countries. $50,000 in prizes.{% endblock %}"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" />
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      /* CSS Variables */
+      :root {
+        --background: hsl(222, 47%, 6%);
+        --foreground: hsl(210, 40%, 98%);
+        --card: hsl(222, 47%, 9%);
+        --card-foreground: hsl(210, 40%, 98%);
+        --primary: hsl(43, 96%, 56%);
+        --primary-foreground: hsl(222, 47%, 6%);
+        --secondary: hsl(217, 33%, 17%);
+        --secondary-foreground: hsl(210, 40%, 98%);
+        --muted: hsl(217, 33%, 17%);
+        --muted-foreground: hsl(215, 20%, 65%);
+        --accent: hsl(199, 89%, 48%);
+        --accent-foreground: hsl(222, 47%, 6%);
+        --border: hsl(217, 33%, 20%);
+        --gold: hsl(43, 96%, 56%);
+        --gold-light: hsl(43, 100%, 70%);
+        --gold-dark: hsl(43, 90%, 40%);
+        --navy: hsl(222, 47%, 6%);
+        --navy-light: hsl(222, 40%, 12%);
+        --slate: hsl(217, 33%, 17%);
+        --cyan: hsl(199, 89%, 48%);
+
+        --gradient-gold: linear-gradient(
+          135deg,
+          hsl(43, 96%, 56%),
+          hsl(43, 100%, 70%)
+        );
+        --gradient-hero: linear-gradient(
+          180deg,
+          hsl(222, 47%, 6%) 0%,
+          hsl(222, 40%, 10%) 100%
+        );
+        --gradient-card: linear-gradient(
+          145deg,
+          hsl(222, 47%, 9%),
+          hsl(217, 33%, 12%)
+        );
+        --gradient-glow: radial-gradient(
+          ellipse at center,
+          hsla(43, 96%, 56%, 0.15) 0%,
+          transparent 70%
+        );
+
+        --shadow-gold: 0 4px 30px hsla(43, 96%, 56%, 0.2);
+        --shadow-card: 0 10px 40px hsla(222, 47%, 3%, 0.5);
+
+        --font-display: "Playfair Display", serif;
+        --font-body: "Inter", sans-serif;
+
+        --radius: 0.75rem;
+      }
+
+      /* Reset & Base */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-body);
+        background: var(--background);
+        color: var(--foreground);
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: var(--font-display);
+        line-height: 1.2;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      /* Utility Classes */
+      .container {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .text-gradient-gold {
+        background: var(--gradient-gold);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .bg-gradient-hero {
+        background: var(--gradient-hero);
+      }
+
+      .bg-gradient-card {
+        background: var(--gradient-card);
+      }
+
+      .shadow-gold {
+        box-shadow: var(--shadow-gold);
+      }
+
+      .shadow-card {
+        box-shadow: var(--shadow-card);
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: var(--radius);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: var(--font-body);
+      }
+
+      .btn-primary {
+        background: var(--gradient-gold);
+        color: var(--primary-foreground);
+        box-shadow: var(--shadow-gold);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -50%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          hsla(0, 0%, 100%, 0.2),
+          transparent
+        );
+        transition: none;
+      }
+
+      .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 40px hsla(43, 96%, 56%, 0.3);
+      }
+
+      .btn-primary:hover::after {
+        animation: shimmer 1.5s forwards;
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+      }
+
+      .btn-outline:hover {
+        background: hsla(43, 96%, 56%, 0.1);
+      }
+
+      .btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .animate-float-delayed {
+        animation: float 6s ease-in-out infinite;
+        animation-delay: 2s;
+      }
+
+      .animate-fade-up {
+        animation: fadeUp 0.8s ease-out forwards;
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 1s ease-out forwards;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 1rem;
+        }
+      }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <div class="navbar-inner">
+          <a href="{% url 'home' %}" class="navbar-logo">
+            <div class="navbar-logo-icon">
+              <i
+                data-lucide="pen-tool"
+                style="
+                  width: 20px;
+                  height: 20px;
+                  color: var(--primary-foreground);
+                "
+              ></i>
+            </div>
+            <span class="navbar-logo-text">Global Essay</span>
+          </a>
+
+          <div class="navbar-links">
+            <a href="#about" class="navbar-link">About</a>
+            <a href="#contest" class="navbar-link">Contest Details</a>
+            <a href="#participate" class="navbar-link">How to Participate</a>
+            <a href="#contact" class="navbar-link">Contact</a>
+            <a href="{% url 'tasks:all_scores' %}" class="navbar-link">Score</a>
+
+          </div>
+          {% if user.is_authenticated %}
+          <div class="navbar-cta">
+            <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+          </div>
+          {% else %}
+          <div class="navbar-cta">
+            <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+          </div>
+          {% endif %}
+          <button class="mobile-menu-btn">
+            <i data-lucide="menu" style="width: 24px; height: 24px"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    {% block content %} {% endblock %}
+    <footer id="contact" class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="footer-logo">
+              <div class="footer-logo-icon">
+                <i
+                  data-lucide="pen-tool"
+                  style="
+                    width: 20px;
+                    height: 20px;
+                    color: var(--primary-foreground);
+                  "
+                ></i>
+              </div>
+              <span class="footer-logo-text">Global Essay</span>
+            </div>
+            <p>
+              Empowering writers worldwide since 2012. Join our community of
+              passionate storytellers and make your voice heard.
+            </p>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Quick Links</h4>
+            <ul class="footer-links">
+              <li><a href="#about">About</a></li>
+              <li><a href="#contest">Contest Details</a></li>
+              <li><a href="#participate">How to Participate</a></li>
+              <li><a href="#">Past Winners</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Resources</h4>
+            <ul class="footer-links">
+              <li><a href="#">Writing Guidelines</a></li>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Blog</a></li>
+              <li><a href="#">Support</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="footer-col-title">Legal</h4>
+            <ul class="footer-links">
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Contest Rules</a></li>
+              <li><a href="#">Cookie Policy</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="footer-copyright">
+            © 2024 Global Essay Writing Contest. All rights reserved.
+          </p>
+
+          <div class="footer-social">
+            <a href="https://x.com/" aria-label="Twitter">
+              <i data-lucide="twitter" style="width: 20px; height: 20px"></i>
+            </a>
+            <a href="https://www.facebook.com/" aria-label="Facebook">
+              <i data-lucide="facebook" style="width: 20px; height: 20px"></i>
+            </a>
+            <a href="https://www.instagram.com/" aria-label="Instagram">
+              <i data-lucide="instagram" style="width: 20px; height: 20px"></i>
+            </a>
+            <a href="https://www.linkedin.com/" aria-label="LinkedIn">
+              <i data-lucide="linkedin" style="width: 20px; height: 20px"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

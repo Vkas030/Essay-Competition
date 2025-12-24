@@ -1,0 +1,400 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="essay-container">
+    <!-- Header Card -->
+    <div class="essay-card header-card">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Write Your Essay</h1>
+                <p>Create and generate a PDF of your essay</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="essay-card form-card">
+        <form method="post" class="custom-form" novalidate>
+            {% csrf_token %}
+            
+            <!-- Title Field (FIXED) -->
+            <div class="form-group">
+                <label for="{{ form.essay_title.id_for_label }}">
+                    <i class="fas fa-heading"></i> Essay Title <span class="required"></span>
+                </label>
+                {{ form.essay_title }}
+
+                {% if form.essay_title.help_text %}
+                    <small class="help-text">{{ form.essay_title.help_text }}</small>
+                {% endif %}
+                {% if form.essay_title.errors %}
+                    <div class="error-text">{{ form.essay_title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Language Selection (UNCHANGED) -->
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-language"></i> Select Language <span class="required"></span>
+                </label>
+                <select id="essayLanguage" name="essay_language" class="language-select">
+                    <option value="en" selected>English</option>
+                    <option value="ne">Nepali</option>
+                </select>
+            </div>
+
+            <!-- Essay Text Field (FIXED, NOTHING REMOVED) -->
+            <div class="form-group">
+                <div class="label-row">
+                    <label> 
+                        <i class="fas fa-file-alt"></i> Essay Content <span class="required"></span>
+                    </label>
+                    <small id="charCount">0 characters</small>
+                </div>
+                
+                <div id="essayEditor" class="essay-editor" contenteditable="true"></div>
+                <input type="hidden" name="essay_text" id="essay_text_hidden">
+
+                {% if form.essay_text.help_text %}
+                    <small class="help-text">{{ form.essay_text.help_text }}</small>
+                {% endif %}
+                <small>Minimum: 500 characters</small>
+                {% if form.essay_text.errors %}
+                    <div class="error-text">{{ form.essay_text.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Buttons (UNCHANGED) -->
+            <div class="form-buttons">
+                <button type="reset" class="btn-clear">
+                    <i class="fas fa-times-circle"></i> Clear Form
+                </button>
+                <button type="submit" class="btn-submit">
+                     Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+/* ===== BASE ===== */
+body {
+    background: #ffffff;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: #111;
+}
+
+/* ===== CONTAINER ===== */
+.essay-container {
+    max-width: 880px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+/* ===== CARD ===== */
+.essay-card {
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 14px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* ===== HEADER ===== */
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.header-text p {
+    margin: 0.3rem 0 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+/* ===== INFO ALERT ===== */
+.info-alert {
+    margin-top: 1.2rem;
+    padding: 0.8rem 1rem;
+    border-left: 4px solid #111;
+    background: #f7f7f7;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* ===== FORM ===== */
+.custom-form .form-group {
+    margin-bottom: 1.6rem;
+}
+
+.custom-form label {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.required {
+    color: #d11;
+}
+
+/* ===== INPUTS ===== */
+.custom-form input,
+.language-select {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+.custom-form input:focus,
+.language-select:focus {
+    outline: none;
+    border-color: #111;
+}
+
+/* ===== EDITOR ===== */
+.essay-editor {
+    min-height: 300px;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.essay-editor:focus {
+    border-color: #111;
+}
+
+.essay-editor:empty::before {
+    content: "Start writing your essay here…";
+    color: #999;
+}
+
+/* ===== META ===== */
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.help-text {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.error-text {
+    font-size: 0.8rem;
+    color: #d11;
+}
+
+#charCount {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* ===== BUTTONS ===== */
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-clear,
+.btn-submit {
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #111;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+/* Clear */
+.btn-clear {
+    color: #111;
+}
+
+.btn-clear:hover {
+    background: #f2f2f2;
+}
+
+/* Submit */
+.btn-submit {
+    background: #111;
+    color: #fff;
+}
+
+.btn-submit:hover {
+    background: #000;
+}
+
+/* ===== STATUS COLORS ===== */
+.text-danger { color: #d11; }
+.text-warning { color: #b7791f; }
+.text-success { color: #15803d; }
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .essay-card {
+        padding: 1.5rem;
+    }
+
+    .header-text h1 {
+        font-size: 1.5rem;
+    }
+}
+</style>
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/nepali-roman/1.1.0/nepali-roman.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editor = document.getElementById('essayEditor');
+    const hiddenInput = document.getElementById('essay_text_hidden');
+    const charCount = document.getElementById('charCount');
+    const languageSelect = document.getElementById('essayLanguage');
+
+    if (editor.innerHTML.trim() === '') {
+        const p = document.createElement('p');
+        p.setAttribute('contenteditable', 'true');
+        p.innerHTML = '<br>';
+        editor.appendChild(p);
+        setTimeout(() => p.focus(), 0);
+    }
+
+    editor.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+
+            const selection = window.getSelection();
+            let currentPara = selection.focusNode.nodeType === 3
+                ? selection.focusNode.parentElement
+                : selection.focusNode;
+
+            while (currentPara && currentPara.tagName !== 'P') {
+                currentPara = currentPara.parentElement;
+                if (currentPara === editor) {
+                    currentPara = null;
+                    break;
+                }
+            }
+
+            if (currentPara && currentPara.getAttribute('contenteditable') === 'true') {
+                currentPara.setAttribute('contenteditable', 'false');
+            }
+
+            const newPara = document.createElement('p');
+            newPara.setAttribute('contenteditable', 'true');
+            newPara.innerHTML = '<br>';
+            editor.appendChild(newPara);
+            newPara.focus();
+
+            updateCharCount();
+        }
+    });
+
+    function updateCharCount() {
+        const text = editor.innerText || '';
+        const length = text.trim().length;
+        charCount.textContent = length + ' characters';
+
+        if (length < 500) {
+            charCount.className = 'text-danger';
+        } else if (length < 1000) {
+            charCount.className = 'text-warning';
+        } else {
+            charCount.className = 'text-success';
+        }
+    }
+
+    editor.addEventListener('input', function(e) {
+        if (languageSelect.value === 'ne' && e.inputType === 'insertText' && e.data === ' ') {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+
+            const range = selection.getRangeAt(0);
+            const node = range.startContainer;
+            
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent;
+                const cursorPos = range.startOffset;
+
+                const textBeforeSpace = text.substring(0, cursorPos - 1);
+                const lastSpaceIndex = textBeforeSpace.lastIndexOf(' ');
+                const wordStartIndex = lastSpaceIndex > -1 ? lastSpaceIndex + 1 : 0;
+                const romanWord = textBeforeSpace.substring(wordStartIndex);
+                
+                if (romanWord.trim().length > 0) {
+                    try {
+                        const nepaliWord = NepaliRoman.toNepali(romanWord);
+                        
+                        const textBeforeWord = text.substring(0, wordStartIndex);
+                        const textAfterCursor = text.substring(cursorPos);
+                        
+                        const newText = textBeforeWord + nepaliWord + " " + textAfterCursor;
+                        node.textContent = newText;
+
+                        const newCursorPos = wordStartIndex + nepaliWord.length + 1;
+                        range.setStart(node, newCursorPos);
+                        range.setEnd(node, newCursorPos);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    } catch (err) {
+                        console.error("Transliteration failed:", err);
+                    }
+                }
+            }
+        }
+        updateCharCount();
+    });
+
+    updateCharCount();
+
+    const form = document.querySelector('.custom-form');
+    form.addEventListener('submit', function() {
+        hiddenInput.value = editor.innerHTML;
+    });
+
+    const resetBtn = document.querySelector('.btn-clear');
+    resetBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        editor.innerHTML = '';
+        const p = document.createElement('p');
+        p.setAttribute('contenteditable', 'true');
+        p.innerHTML = '<br>';
+        editor.appendChild(p);
+        p.focus();
+        updateCharCount();
+    });
+});
+</script>
+{% endblock %}
